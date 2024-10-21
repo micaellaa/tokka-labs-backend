@@ -21,12 +21,15 @@ export const fetchHistoricalTransactions = async (req, res) => {
     // Pagination
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 50;
+    // Optional search params
+    const txhash = req.query.txhash || null;
+    const startTime = req.query.startTime ? parseFloat(req.query.startTime) : null;
+    const endTime = req.query.endTime ? parseFloat(req.query.endTime) : null;
 
     const ethToUsdtRate = await getEthToUsdt();
-    const transactions = await getHistoricalTransactions(page, limit);
+    const transactions = await getHistoricalTransactions(page, limit, txhash, startTime, endTime);
 
-    console.log("transactions", transactions)
-    res.status(200).json(transactions.data.result.map(tx => ({
+    res.status(200).json(transactions.map(tx => ({
       feeETH: (tx.gasUsed * tx.gasPrice) / 1e18,
       feeUSDT: (tx.gasUsed * tx.gasPrice * ethToUsdtRate) / 1e18,
       ...tx

@@ -25,9 +25,26 @@ export const getTransactionByHash = async (txHash) => {
   };
 };
 
-export const getHistoricalTransactions = async (page, limit) => {
+export const getHistoricalTransactionByTimeStamp = async (time) => {
+  try {
+    const params = {
+      module: 'block',
+      action: 'getblocknobytime',
+      timestamp: time,
+      closest: 'before'
+    }
+    const response = await etherscanApi.get('/api', {
+      params
+    });
+    return response.data.result;
+  } catch (e) {
+    console.error("Error fetching historical transaction block no:", error.message);
+    throw new Error('Failed to fetch historical transaction block no');
+  }
+}
+
+export const getHistoricalTransactions = async (page, limit, txhash, startTime, endTime) => {
   // for Reference: https://etherscan.io/address/0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640#tokentxns
-  console.log("getHistoricalTransactions...");
   try {
     const params = {
       module: 'account',
@@ -35,20 +52,36 @@ export const getHistoricalTransactions = async (page, limit) => {
       address: process.env.POOL_ADDRESS,
       startblock: 0,  
       endblock: 99999999, 
-      sort: 'desc',
-    }
-    if (page) {
-      params.page = page;
-    }
-    if (limit) {
-      params.offset = limit;
+      sort: 'asc',
     }
 
+    if (!txhash) {
+      if (page) {
+        params.page = page;
+      }
+      if (limit) {
+        params.offset = limit;
+      }
+    }
+    if (startTime && endTime) {
+      const startblock = await getHistoricalTransactionByTimeStamp(startTime);
+      const endblock = await getHistoricalTransactionByTimeStamp(endTime);
+      params.startblock = startblock;
+      params.endblock = endblock;
+    }
+    
     const response = await etherscanApi.get('/api', {
       params
     });
+    let transactions = response.data.result;
+    if (txhash) {
+      if (txhash) {
+        transactions = transactions.filter(tx => tx.hash.startsWith(txhash));
+      }
+    }
+    // console.log(transactions.length)
 
-    return response;
+    return transactions;
   } catch (error) {
     console.error("Error fetching historical transactions:", error.message);
     throw new Error('Failed to fetch historical transactions');
