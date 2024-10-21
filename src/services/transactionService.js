@@ -25,16 +25,27 @@ export const getTransactionByHash = async (txHash) => {
   };
 };
 
-export const getHistoricalTransactions = async () => {
+export const getHistoricalTransactions = async (page, limit) => {
   // for Reference: https://etherscan.io/address/0x88e6a0c2ddd26feeb64f039a2c41296fcb3f5640#tokentxns
-
+  console.log("getHistoricalTransactions...");
   try {
+    const params = {
+      module: 'account',
+      action: 'tokentx',
+      address: process.env.POOL_ADDRESS,
+      startblock: 0,  
+      endblock: 99999999, 
+      sort: 'desc',
+    }
+    if (page) {
+      params.page = page;
+    }
+    if (limit) {
+      params.offset = limit;
+    }
+
     const response = await etherscanApi.get('/api', {
-      params: {
-        module: 'account',
-        action: 'tokentx',
-        address: process.env.POOL_ADDRESS,
-      },
+      params
     });
 
     return response;
