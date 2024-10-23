@@ -1,17 +1,21 @@
 import { infuraProvider, etherscanApi } from '../utils/apiProviders.js';
 import { getEthToUsdt } from './ethPriceService.js';
+import { ethers } from 'ethers';
 import axios from 'axios';
 
 // Fetch a single transaction by hash and calculate the fee
 // Sample hash: 0x125e0b641d4a4b08806bf52c0c6757648c9963bcda8681e4f996f09e00d4c2cc
 export const getTransactionByHash = async (txHash) => {
   const tx = await infuraProvider.getTransaction(txHash);
+  console.log("tx", tx);
   if (!tx) throw new Error('Transaction not found');
 
   const receipt = await infuraProvider.getTransactionReceipt(txHash);
+  console.log("receipt", receipt);
+
   const gasUsed = tx.gasLimit.toString();
   const gasPrice = tx.gasPrice.toString();
-  const txFeeEth = ethers.utils.formatEther(receipt.gasUsed.toString()) * ethers.utils.formatUnits(gasPrice, 'gwei');
+  const txFeeEth = ethers.formatEther(receipt.gasUsed.toString()) * ethers.formatUnits(gasPrice, 'gwei');
 
   const ethToUsdtRate = await getEthToUsdt();
   const txFeeUsdt = txFeeEth * ethToUsdtRate;

@@ -4,10 +4,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-export const infuraProvider = new ethers.InfuraProvider('mainnet', {
-  apiKey: process.env.INFURA_API_KEY,
-  secret: process.env.INFURA_API_KEY_SECRET
-});
+export const infuraProvider = new ethers.InfuraProvider('mainnet', process.env.INFURA_API_KEY);
 
 export const infuraWebSocketProvider = new ethers.InfuraWebSocketProvider(
   "mainnet",

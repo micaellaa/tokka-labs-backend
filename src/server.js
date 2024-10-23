@@ -1,8 +1,12 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
+import http from "http";
+import { Server } from "socket.io";
 
 import transactionRoutes from "./routes/transactionRoutes.js";
+import { swapEventListener } from "./websockets/swapEventListener.js";
+
 dotenv.config();
 
 const app = express();
@@ -13,7 +17,20 @@ const corsOptions = {
   methods: ["GET", "POST"],
   credentials: true, 
 };
+
 app.use(cors(corsOptions));
+
+const httpServer = http.createServer(app);
+const io = new Server(httpServer, {
+  cors: {
+    origin: "http://localhost:5234", 
+    methods: ["GET", "POST"],
+    credentials: true,
+  },
+});
+
+// Infura web socket listener
+swapEventListener(io);
 
 app.get("/", (req, res) => {
   res.send("test-message");
@@ -21,6 +38,7 @@ app.get("/", (req, res) => {
 
 app.use("/transaction", transactionRoutes);
 
-app.listen(port, () => {
+// Start the server
+httpServer.listen(port, () => {
   console.log(`Server running on port ${port}`);
-})
+});
