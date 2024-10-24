@@ -3,6 +3,9 @@
 ## Overview
 This backend service is part of the Tokka Labs Engineering Challenge. It tracks transactions in the Uniswap V3 WETH-USDC pool and calculates the transaction fee in USDT.
 
+## Related Repositories
+- [Frontend](https://github.com/micaellaa/tokka-labs-frontend) 
+
 ## Features
 - Fetches transaction details by hash
 - Supports fetching historical transactions
@@ -18,7 +21,7 @@ This backend service is part of the Tokka Labs Engineering Challenge. It tracks 
 
 ### 1. Clone the Repository
 ```bash
-git clone <repository-url>
+git clone https://github.com/micaellaa/tokka-labs-backend.git
 cd backend
 ```
 
