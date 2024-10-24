@@ -31,7 +31,7 @@ export const swapEventListener = (io) => {
       tick: decodedLog.args.tick.toString()
     };
 
-    io.emit('swapEvent', swapEventData);
+    // io.emit('swapEvent', swapEventData);
 
     try {
       const { txFeeEth, txFeeUsdt } = await getTransactionByHash(log.transactionHash);

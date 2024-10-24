@@ -6,6 +6,7 @@ import { Server } from "socket.io";
 
 import transactionRoutes from "./routes/transactionRoutes.js";
 import { swapEventListener } from "./websockets/swapEventListener.js";
+import { transferEventListener } from "./websockets/transferEventListener.js";
 
 dotenv.config();
 
@@ -30,7 +31,8 @@ const io = new Server(httpServer, {
 });
 
 // Infura web socket listener
-swapEventListener(io);
+// swapEventListener(io);
+transferEventListener(io);
 
 app.get("/", (req, res) => {
   res.send("test-message");
