@@ -31,7 +31,7 @@ const io = new Server(httpServer, {
 });
 
 // Infura web socket listener
-// swapEventListener(io);
+swapEventListener(io);
 transferEventListener(io);
 
 app.get("/", (req, res) => {

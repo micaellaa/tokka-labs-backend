@@ -19,9 +19,8 @@ export const swapEventListener = (io) => {
     const iface = new ethers.Interface(swapEventAbi);
     const decodedLog = iface.parseLog(log);
 
-    console.log(decodedLog.args)
-
     const swapEventData = {
+      hash: log.transactionHash,
       sender: decodedLog.args.sender,
       recipient: decodedLog.args.recipient,
       amount0: decodedLog.args.amount0.toString(),
@@ -30,8 +29,6 @@ export const swapEventListener = (io) => {
       liquidity: decodedLog.args.liquidity.toString(),
       tick: decodedLog.args.tick.toString()
     };
-
-    // io.emit('swapEvent', swapEventData);
 
     try {
       const { txFeeEth, txFeeUsdt } = await getTransactionByHash(log.transactionHash);
