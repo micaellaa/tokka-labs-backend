@@ -11,13 +11,11 @@ export const transferEventListener = (io) => {
     address: poolAddress,
     topics: [transferEventSignature]
   }, async (log) => {
-    // console.log(log);
     const transferEventAbi = [
       "event Transfer(address indexed from, address indexed to, uint256 value)"
     ];
     const iface = new ethers.Interface(transferEventAbi);
     const decodedLog = iface.parseLog(log);
-    // console.log(decodedLog.args);
 
     const transferEventData = {
       from: decodedLog.args.from,

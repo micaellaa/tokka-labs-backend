@@ -8,7 +8,6 @@ const swapEventSignature = ethers.id(
 );
 
 export const swapEventListener = (io) => {
-  console.log("in swapEventListener...")
   infuraWebSocketProvider.on({
     address: poolAddress,
     topics: [swapEventSignature]
@@ -32,12 +31,6 @@ export const swapEventListener = (io) => {
 
     try {
       const { txFeeEth, txFeeUsdt } = await getTransactionByHash(log.transactionHash);
-
-      console.log(`Transaction Fee in ETH: ${txFeeEth} ETH`);
-      console.log(`Transaction Fee in USDT: ${txFeeUsdt} USDT`);
-
-      // // Emit the transaction fee data
-      // io.emit('transactionFee', { txFeeEth, txFeeUsdt });
 
       swapEventData.feeETH = txFeeEth;
       swapEventData.feeUSDT = txFeeEth;

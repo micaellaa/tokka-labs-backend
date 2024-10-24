@@ -7,12 +7,9 @@ import axios from 'axios';
 // Sample hash: 0x125e0b641d4a4b08806bf52c0c6757648c9963bcda8681e4f996f09e00d4c2cc
 export const getTransactionByHash = async (txHash) => {
   const tx = await infuraProvider.getTransaction(txHash);
-  console.log("tx", tx);
   if (!tx) throw new Error('Transaction not found');
 
   const receipt = await infuraProvider.getTransactionReceipt(txHash);
-  console.log("receipt", receipt);
-
   const gasUsed = tx.gasLimit.toString();
   const gasPrice = tx.gasPrice.toString();
   const txFeeEth = ethers.formatEther(receipt.gasUsed.toString()) * ethers.formatUnits(gasPrice, 'gwei');
@@ -83,7 +80,6 @@ export const getHistoricalTransactions = async (page, limit, txhash, startTime, 
         transactions = transactions.filter(tx => tx.hash.startsWith(txhash));
       }
     }
-    // console.log(transactions.length)
 
     return transactions;
   } catch (error) {
