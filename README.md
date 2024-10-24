@@ -55,3 +55,28 @@ npm start
 ```bash
 npm test
 ```
+
+## Architectural Principles
+
+This backend is designed using several key architectural principles to ensure maintainability, scalability, and clean code structure:
+
+### 1. Separation of Concerns (SoC)
+   - The backend is organized to separate **controllers**, **routes**, **services**, and **utilities** into distinct directories.
+   - Each component is responsible for a specific part of the application:
+     - **Controllers**: Handle incoming HTTP requests and delegate logic to the services.
+     - **Routes**: Define API endpoints and connect them to controllers.
+     - **Services**: Contain the core business logic and handle interactions with external APIs or databases.
+     - **Utils**: Include API providers used across the application.
+   - This separation improves code readability, testability, and ease of maintenance.
+
+## Design Considerations for Tools
+
+### 1. Real-Time Communication with WebSockets
+   - WebSockets are used to support real-time updates, particularly for streaming Uniswap transactions like swaps and transfers.
+   - This approach enables faster and more efficient updates to the frontend, providing users with near real-time transaction data.
+
+### 2. API Providers
+   - External API communication is managed through a dedicated utility (`apiProviders.js`), which abstracts the details of interacting with third-party APIs like Etherscan API and Infura API.
+   - This modular design allows for easy swapping or modification of API providers, making the code more flexible and adaptable to changes in external dependencies.
+
+
